@@ -16,7 +16,6 @@ public interface TaskRepository extends JpaRepository<Task, Integer> {
     @Query("SELECT t FROM Task t WHERE t.title LIKE %:keyword% OR t.description LIKE %:keyword%")
     List<Task> findByTitleOrDescriptionContaining(@Param("keyword") String keyword);
 
-
     List<Task> findByIdBetween(int startId, int endId);
 
     List<Task> findByCompleted(boolean completed);
@@ -24,6 +23,4 @@ public interface TaskRepository extends JpaRepository<Task, Integer> {
     List<Task> findByTitle(String title);
 
     List<Task> findByDescriptionContaining(String keyword);
-
-    List<Task> findByTitleAndCompleted(String title, boolean completed);
 }

@@ -19,6 +19,9 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+/**
+ * REST Controller: Handles HTTP requests for Task API.
+ */
 @RestController
 @RequestMapping("/TaskAPI")
 public class TaskController {
@@ -30,10 +33,22 @@ public class TaskController {
         this.taskService = taskService;
     }
 
+    /**
+     * GET /TaskAPI - Get all tasks
+     */
     @GetMapping
     public List<Task> getAllTasks() {
         return  taskService.getAllTasks();
     }
+
+    /**
+     * POST /TaskAPI - Create a new task
+     * Validation: Uses @Valid for input validation
+     * and BindingResult for error handling in createTask method.
+     *
+     * Exception Handling: Catches and returns appropriate HTTP status codes
+     * and error messages for exceptions thrown by service layer.
+     */
 
     @PostMapping
     public ResponseEntity<?> createTask(@Valid @RequestBody Task newTask , BindingResult result) {
@@ -51,7 +66,9 @@ public class TaskController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
         }
     }
-
+    /**
+     * DELETE /TaskAPI/{id} - Delete task by id
+     */
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteTask(@PathVariable int id){
         try {
@@ -64,7 +81,9 @@ public class TaskController {
         }
     }
 
-
+    /**
+     * GET /TaskAPI/{id} - Get task by id
+     */
     @GetMapping("/{id}")
     public ResponseEntity<?> getTaskById(@PathVariable int id) {
         try {
@@ -76,7 +95,9 @@ public class TaskController {
         }
     }
 
-
+    /**
+     * PUT /TaskAPI/{id} - Update task by id (replace)
+     */
     @PutMapping("/{id}")
     public ResponseEntity<?> updatePutTask(@PathVariable int id, @RequestBody Task updatedTask) {
         try {
@@ -87,6 +108,9 @@ public class TaskController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
         }
     }
+    /**
+     * PATCH /TaskAPI/{id} - Update task by id (partial update)
+     */
     @PatchMapping("/{id}")
     public ResponseEntity<?> updatePatchTask(@PathVariable int id, @RequestBody Task updatedTask) {
         try {
@@ -97,27 +121,38 @@ public class TaskController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
         }
     }
-
+    /**
+     * GET /TaskAPI/completed/{completed} - Get tasks by completion status
+     */
     @GetMapping("/completed/{completed}")
     public List<Task> getTasksByCompletionStatus(@PathVariable boolean completed) {
         return taskService.getTasksByCompletionStatus(completed);
     }
-
+    /**
+     * GET /TaskAPI/title/{title} - Get tasks by title
+     */
     @GetMapping("/title/{title}")
     public List<Task> getTasksByTitle(@PathVariable String title) {
         return taskService.getTasksByTitle(title);
     }
 
+    /**
+     * GET /TaskAPI/description/{keyword} - Get tasks by description containing keyword
+     */
     @GetMapping("/description/{keyword}")
     public List<Task> getTasksByDescriptionContaining(@PathVariable String keyword) {
         return taskService.getTasksByDescriptionContaining(keyword);
     }
-
+    /**
+     * GET /TaskAPI/id-range/{startId}/{endId} - Get tasks by id range
+     */
     @GetMapping("/id-range/{startId}/{endId}")
     public List<Task> getTasksByIdRange(@PathVariable int startId, @PathVariable int endId) {
         return taskService.getTasksByIdRange(startId, endId);
     }
-
+    /**
+     * GET /TaskAPI/keyword/{keyword} - Get tasks by title or description containing keyword
+     */
     @GetMapping("/keyword/{keyword}")
     public List<Task> getTasksByTitleOrDescription(@PathVariable String keyword) {
         return taskService.getTasksByTitleOrDescription(keyword);
